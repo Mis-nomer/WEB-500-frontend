@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import Habit from '../../controllers/item.controller'
 
 const habits = [
@@ -23,7 +22,7 @@ const habits = [
   },
 ]
 
-export default () => {
+export default ({ modalState, setModalState }: { modalState: Boolean; setModalState: any }) => {
   const [listHabit, setListHabits] = useState(habits)
 
   const handleCheck = function ({ target }: any) {
@@ -35,17 +34,11 @@ export default () => {
       }
       return habit
     })
-    // const updated = listHabit.map(habit => {
-    //   if (habit.id == id) {
-    //     habit.completed = checked
-    //   }
-    //   return habit
-    // })
+
     setListHabits(updated)
   }
-
   return (
-    <div id='sidebar' className='col-span-1 bg-[#084c61] text-white p-2.5 min-h-screen font-sans'>
+    <div id='sidebar' className='z-50 col-span-1 bg-[#084c61] text-white p-2.5 min-h-screen font-sans'>
       <div className='bg-[#ffc857] px-2 py-3 rounded-md flex justify-between items-center text-black'>
         <div className=''>
           <img
@@ -82,25 +75,40 @@ export default () => {
                     ${habit.completed ? 'opacity-50 bg-green-400' : 'bg-[#ffc857]'} 
                   `}
                 >
-                  <p className='text-base'>
+                  <p className='text-base pointer-events-none select-none'>
                     {habit.title} - <span className='font-bold'>{habit.time}</span>
                   </p>
                   <label
                     htmlFor={habit.id as unknown as string}
-                    className='transition-colors w-[24px] h-[24px] bg-neutral-100 block rounded-md pointer-events-none'
+                    className='transition-colors w-[24px] h-[24px] bg-neutral-100 block rounded-md pointer-events-none select-none'
                   >
                     {habit.completed && <i className='fa-solid fa-check p-1'></i>}
                   </label>
-                  <input type='checkbox' name='habit.completed' id={habit.id as unknown as string} className='hidden' />
+                  <input
+                    type='checkbox'
+                    name='habit.completed'
+                    id={habit.id as unknown as string}
+                    className='hidden pointer-events-none select-none'
+                  />
                 </li>
               ))}
           </ul>
         </div>
         <hr className='opacity-50 my-3' />
-        <div className='px-2 py-3 rounded-md hover:bg-[#ffc857] bg-[#177e89] hover:text-black text-white hover:cursor-pointer transition-colors'>
-          <i className='fa-solid fa-plus'></i>
-          <span className='px-1 text-base font-semibold'>Add Habit</span>
-        </div>
+        <button
+          onClick={() => setModalState(!modalState)}
+          className={`block w-full px-2 py-3 rounded-md hover:bg-[#ffc857] ${
+            modalState ? 'bg-red-500' : 'bg-[#177e89]'
+          } hover:text-black text-white hover:cursor-pointer transition-colors`}
+        >
+          {modalState ? <i className='fa-solid fa-xmark'></i> : <i className='fa-solid fa-plus'></i>}
+          <span className='px-2 text-base font-semibold'>{modalState ? 'Cancel' : 'New Habit'}</span>
+        </button>
+        {modalState && (
+          <button className='text-medium block mt-4 w-full px-2 py-3 rounded-md hover:bg-[#ffc857] bg-[#177e89] hover:text-black text-white hover:cursor-pointer transition-colors'>
+            Add Habit
+          </button>
+        )}
       </div>
     </div>
   )
