@@ -1,6 +1,6 @@
-import Heatmap from './blocks/Heatmap'
-import Sidebar from './blocks/Sidebar'
-import SidebarModal from './blocks/Modal'
+import Heatmap from './HomeSidebarHeatmap'
+import Sidebar from './HomeSidebar'
+import SidebarModal from './HomeModal'
 import { useState } from 'react'
 
 const Main = ({ modalState }: { modalState: Boolean }) => {

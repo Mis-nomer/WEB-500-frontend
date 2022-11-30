@@ -19,6 +19,7 @@ const TopSection = () => (
     <div className='bg-[#ffc857] mb-3 px-2 py-3 rounded-md flex justify-between items-center text-black'>
       <div>
         <img
+          src='https://d33wubrfki0l68.cloudfront.net/56b13b3bf4c6a968ed185545896004efbe836a25/c7537/assets/rob@120w.c8436c81.webp'
           alt=''
           className='object-cover w-[32px] h-[32px] rounded-full inline-block'
         />

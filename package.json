@@ -22,7 +22,6 @@
     "react-hook-form": "^7.39.4",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.4.3",
-    "reaviz": "^13.3.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
