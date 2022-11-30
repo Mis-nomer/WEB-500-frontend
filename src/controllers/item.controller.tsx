@@ -1,10 +1,10 @@
-import inst from "../instance";
+import inst from '../instance'
 
-const baseURL = "/habit/";
+const baseURL = '/habit/'
 
 export default {
   add: async (body: {}) => await inst.post(baseURL, body),
-  read: async (id?: number) => await inst.get(baseURL + (id || "")),
+  read: async (body: {}) => await inst.get(baseURL, body),
   delete: async (id: number) => await inst.delete(baseURL + id),
   update: async (id: number, body: {}) => await inst.put(baseURL + id, body),
-};
+}

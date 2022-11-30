@@ -4,14 +4,14 @@ import '../../heatmap.css'
 import moment from 'moment'
 
 export default function () {
-  const startOfMonth = moment().startOf('month').format('YYYY-MM-DD hh:mm')
-  const endOfMonth = moment().endOf('month').format('YYYY-MM-DD hh:mm')
+  const prevMonthFirstDay  = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD hh:mm')
+  const nextMonthLastDay = moment().add(1, 'months').endOf('month').format('YYYY-MM-DD hh:mm')
 
   return (
     <div className='w-[50%] mx-auto'>
       <CalendarHeatmap
-        startDate={startOfMonth}
-        endDate={endOfMonth}
+        startDate={prevMonthFirstDay}
+        endDate={nextMonthLastDay}
         values={[
           { date: '2022-11-20', count: 1 },
           { date: '2022-11-21', count: 5 },
@@ -25,9 +25,7 @@ export default function () {
           return `color-github-${value.count}`
         }}
         showWeekdayLabels={true}
-        showMonthLabels={false}
         weekdayLabels={['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']}
-        horizontal={false}
         onClick={value => {
           console.log(`value count: ${value ? value.count : 0}`)
         }}
