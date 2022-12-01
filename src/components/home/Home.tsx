@@ -7,7 +7,7 @@ const Main = ({ modalState }: { modalState: Boolean }) => {
   return (
     <div id='main' className='col-span-4 relative'>
       <Heatmap />
-      <SidebarModal modalState={modalState} />
+      {modalState && <SidebarModal modalState={modalState} />}
     </div>
   )
 }

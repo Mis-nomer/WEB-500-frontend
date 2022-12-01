@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import 'react-calendar-heatmap/dist/styles.css'
 import moment from 'moment'
 
-const Styled = styled.div/*css*/`
+const Style = styled.div/*css*/`
   & .react-calendar-heatmap text {
     font-size: 5px;
   }
@@ -47,7 +47,7 @@ export default function () {
   const nextMonthLastDay = moment().add(1, 'months').endOf('month').format('YYYY-MM-DD hh:mm')
 
   return (
-    <Styled>
+    <Style>
       <div className='w-[50%] mx-auto'>
         <CalendarHeatmap
           startDate={prevMonthFirstDay}
@@ -71,6 +71,6 @@ export default function () {
           }}
         />
       </div>
-    </Styled>
+    </Style>
   )
 }
