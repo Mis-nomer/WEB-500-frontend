@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react'
-import Habit from '../../controllers/item.controller'
 interface IHabit {
   _id: Number
   email: String
@@ -44,10 +42,10 @@ const TopSection = () => (
 
 const MidSection = ({ listHabit, handleCheck }: { listHabit: IHabit[]; handleCheck: (a: any) => void }) => {
   return (
-    <div className='mt-3 text-sm font-medium'>
+    <div className='my-10 text-sm font-medium'>
       <div className='p-2 rounded-md bg-[#177e89] text-white'>
-        <p className='font-bold text-lg'>Active Habits - {listHabit.filter(h => !h.completed).length}</p>
-        <ul className='text-black'>
+        <p className='font-bold text-lg'>Today's Habits - {listHabit.filter(h => !h.completed).length}</p>
+        <ul className='text-black mx-1  '>
           {listHabit &&
             listHabit.map(habit => (
               <li
@@ -76,35 +74,32 @@ const MidSection = ({ listHabit, handleCheck }: { listHabit: IHabit[]; handleChe
   )
 }
 
-const BotSection = ({ modalState, setModalState }: { modalState: Boolean; setModalState: (state: Boolean) => void }) => (
-  <div className='text-medium text-white font-semibold'>
-    {modalState && (
-      <button className='block w-full mb-5 px-2 py-3 rounded-md hover:bg-[#ffc857] bg-[#177e89] hover:text-black hover:cursor-pointer transition-colors'>
-        Add Habit
+const BotSection = ({ modalState, setModalState }: { modalState: Boolean; setModalState: any }) => {
+  return (
+    <div>
+      <button
+        onClick={() => setModalState(!modalState)}
+        className={`block w-full px-2 py-3 rounded-md hover:bg-[#ffc857] ${
+          modalState ? 'bg-red-500' : 'bg-[#177e89]'
+        } hover:text-black text-white hover:cursor-pointer transition-colors`}
+      >
+        {modalState ? 'Cancel' : 'New Habit'}
       </button>
-    )}
-    <button
-      onClick={() => setModalState(!modalState)}
-      className={`block w-full px-2 py-3 rounded-md hover:bg-[#ffc857] ${
-        modalState ? 'bg-red-500' : 'bg-[#177e89]'
-      } hover:text-black text-white hover:cursor-pointer transition-colors`}
-    >
-      {modalState ? <i className='fa-solid fa-xmark'></i> : <i className='fa-solid fa-plus'></i>}
-      <span className='px-2'>{modalState ? 'Cancel' : 'New Habit'}</span>
-    </button>
-  </div>
-)
+    </div>
+  )
+}
 
-export default ({ modalState, setModalState }: { modalState: Boolean; setModalState: any }) => {
-  const config = { params: { email: 'Judson.Kirlin@gmail.com' } }
-  const [listHabit, setListHabit] = useState<IHabit[]>([])
-
-  useEffect(() => {
-    Habit.read(config)
-      .then(res => res.data)
-      .then(res => setListHabit(res.data))
-  }, [])
-
+export default ({
+  modalState,
+  setModalState,
+  listHabit,
+  setListHabit,
+}: {
+  modalState: Boolean
+  setModalState: any
+  listHabit: IHabit[]
+  setListHabit: any
+}) => {
   const handleCheck = function ({ target }: any) {
     const checkbox = target.querySelector('input[type=checkbox]')
     const updated = listHabit.map(habit => {
