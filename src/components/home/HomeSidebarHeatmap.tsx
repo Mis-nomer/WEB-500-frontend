@@ -2,8 +2,9 @@ import CalendarHeatmap from 'react-calendar-heatmap'
 import styled from 'styled-components'
 import 'react-calendar-heatmap/dist/styles.css'
 import moment from 'moment'
+import { IHabit } from '../../interface/habit'
 
-const Style = styled.div/*css*/`
+const Style = styled.div/*css*/ `
   & .react-calendar-heatmap text {
     font-size: 5px;
   }
@@ -42,9 +43,15 @@ const Style = styled.div/*css*/`
   }
 `
 
-export default function () {
+export default function ({ listHabit, setListHabit }: { listHabit: IHabit[]; setListHabit: any }) {
   const prevMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD hh:mm')
   const nextMonthLastDay = moment().add(1, 'months').endOf('month').format('YYYY-MM-DD hh:mm')
+
+  let data = listHabit.map(habit => {
+    let date = moment(habit.startDate).format('Y-M-D')
+    let count = habit.streak.length
+    return { date, count }
+  })
 
   return (
     <Style>
@@ -52,12 +59,7 @@ export default function () {
         <CalendarHeatmap
           startDate={prevMonthFirstDay}
           endDate={nextMonthLastDay}
-          values={[
-            { date: '2022-11-20', count: 1 },
-            { date: '2022-11-21', count: 5 },
-            { date: '2022-11-26', count: 4 },
-            // ...and so on
-          ]}
+          values={data}
           classForValue={value => {
             if (!value) {
               return 'color-empty'
@@ -67,7 +69,7 @@ export default function () {
           showWeekdayLabels={true}
           weekdayLabels={['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']}
           onClick={value => {
-            console.log(`value count: ${value ? value.count : 0}`)
+            console.log(`value count: ${value?.count}`)
           }}
         />
       </div>

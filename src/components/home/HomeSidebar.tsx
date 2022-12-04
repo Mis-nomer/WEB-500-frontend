@@ -79,7 +79,7 @@ const BotSection = ({ modalState, setModalState }: { modalState: Boolean; setMod
     <div>
       <button
         onClick={() => setModalState(!modalState)}
-        className={`block w-full px-2 py-3 rounded-md hover:bg-[#ffc857] ${
+        className={`block w-full px-2 py-3 rounded-md hover:bg-[#ffc857] font-bold ${
           modalState ? 'bg-red-500' : 'bg-[#177e89]'
         } hover:text-black text-white hover:cursor-pointer transition-colors`}
       >
