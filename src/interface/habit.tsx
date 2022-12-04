@@ -8,7 +8,7 @@ export interface IHabit {
     type: string
   }
   repeat: string[]
-  streak: Date[]
+  streak: string[]
   startDate: Date
   options: {
     reminder: boolean

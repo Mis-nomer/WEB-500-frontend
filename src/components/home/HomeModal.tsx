@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Habit from '../../controllers/item.controller'
+import Habit from '../../controllers/controller'
 import DatePicker from 'react-datepicker'
 import CreatableSelect from 'react-select/creatable'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -29,7 +29,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
 
   const onSubmit = (data: IHabit) => {
     data.email = 'Judson.Kirlin@gmail.com'
-    Habit.add({ habit: data }).then(() => {
+    Habit.add('/habit/', { habit: data }).then(() => {
       setModalState(!modalState)
       setIsSuccess(true)
     })
@@ -67,7 +67,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
 
   return (
     <div>
-      <div className={`absolute inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center pt-10 md:pt-0`}>
+      <div className={`absolute  inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center pt-10 md:pt-0`}>
         <div className={`relative w-10/12 md:w-1/2 rounded-md shadow-lg bg-[#084c61] transition-opacity duration-300`}>
           <form onSubmit={handleSubmit(data => onSubmit(data as IHabit))} onBlur={() => setIsFocused('none')}>
             {/* Title */}
@@ -165,12 +165,12 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
               <p className={`transition-all text-sm mb-2 ${isFocused == 'repeat' && 'text-lg'}`}>Repeat On:</p>
               <input type='hidden' id='repeat' value={repeatDays} {...register('repeat', { required: true })} />
               <div className='w-8/12 mx-auto'>
-                <div className='flex flex-wrap justify-between items-center text-center gap-2'>
+                <div className='flex flex-wrap justify-between items-center text-center gap-1'>
                   {weekdays.map(day => (
                     <div key={day} className='flex-1 '>
                       <label
                         htmlFor={day}
-                        className={`transition-colors py-2.5 px-0.5 w-11/12 block rounded-full text-sm object-cover select-none cursor-pointer pointer-event-none  ${
+                        className={`transition-colors py-2.5 px-1 w-11/12 block rounded-full text-sm object-cover select-none cursor-pointer pointer-event-none  ${
                           repeatDays.includes(day) ? (isFocused == 'repeat' ? 'bg-[#084c61]' : 'bg-green-500') : ''
                         }`}
                       >
@@ -190,6 +190,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
                 <span className='px-2'>Add Habit</span>
               </button>
               <button
+                onClick={() => setModalState(!modalState)}
                 className={`block w-full px-2 py-3 rounded-md hover:bg-[#ffc857] bg-red-500 hover:text-black text-white hover:cursor-pointer transition-colors`}
               >
                 <i className='fa-solid fa-xmark'></i>

@@ -1,17 +1,7 @@
-interface IHabit {
-  _id: Number
-  email: String
-  title: String
-  description: String
-  startDate: Date
-  repeat: String[]
-  streak: Date[]
-  options: {
-    reminder: Boolean
-  }
-  completed: Boolean
-}
+import { IHabit } from '../../interface/habit'
+import moment from 'moment'
 
+const today = moment().format('Y-M-D')
 const TopSection = () => (
   <>
     <div className='bg-[#ffc857] mb-3 px-2 py-3 rounded-md flex justify-between items-center text-black'>
@@ -44,7 +34,7 @@ const MidSection = ({ listHabit, handleCheck }: { listHabit: IHabit[]; handleChe
   return (
     <div className='my-10 text-sm font-medium'>
       <div className='p-2 rounded-md bg-[#177e89] text-white'>
-        <p className='font-bold text-lg'>Today's Habits - {listHabit.filter(h => !h.completed).length}</p>
+        <p className='font-bold text-lg'>Today's Habits - {listHabit.filter(h => !h.streak.includes(today)).length}</p>
         <ul className='text-black mx-1  '>
           {listHabit &&
             listHabit.map(habit => (
@@ -52,18 +42,19 @@ const MidSection = ({ listHabit, handleCheck }: { listHabit: IHabit[]; handleChe
                 key={String(habit._id)}
                 onClick={handleCheck}
                 className={`transition-colors p-2 hover:bg-green-400 cursor-pointer flex justify-between items-center my-2 rounded-sm ${
-                  habit.completed ? 'opacity-50 bg-green-400' : 'bg-[#ffc857]'
+                  habit.streak.includes(today) ? 'opacity-50 bg-green-400' : 'bg-[#ffc857]'
                 } 
             `}
               >
                 <p className='text-base pointer-events-none select-none'>
-                  {habit.title} - <span className='font-bold'>{}</span>
+                  {habit.title} - <span className='font-bold'></span>
                 </p>
+
                 <label
                   htmlFor={habit._id as unknown as string}
                   className='transition-colors w-[24px] h-[24px] bg-neutral-100 block rounded-md pointer-events-none select-none'
                 >
-                  {habit.completed && <i className='fa-solid fa-check p-1'></i>}
+                  {habit.streak.includes(today) && <i className='fa-solid fa-check p-1'></i>}
                 </label>
                 <input type='checkbox' name={String(habit._id)} id={String(habit._id)} className='hidden pointer-events-none select-none' />
               </li>
@@ -104,7 +95,13 @@ export default ({
     const checkbox = target.querySelector('input[type=checkbox]')
     const updated = listHabit.map(habit => {
       if (checkbox.id == habit._id) {
-        habit.completed = checkbox.checked = !checkbox.checked
+        if (habit.streak.includes(today)) {
+          habit.streak = habit.streak.filter(s => s != today)
+          checkbox.checked = false
+        } else {
+          habit.streak.push(today)
+          checkbox.checked = true
+        }
       }
       return habit
     })
