@@ -29,7 +29,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
 
   const onSubmit = (data: IHabit) => {
     data.email = 'Judson.Kirlin@gmail.com'
-    Habit.add('/habit/', { habit: data }).then(() => {
+    Habit.add('/habit/', data).then(() => {
       setModalState(!modalState)
       setIsSuccess(true)
     })
@@ -145,7 +145,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
               />
             </div>
             {/* Description */}
-            <div className={`transition-colors  py-4 px-8 text-sm text-white ${isFocused == 'description' && 'bg-[#ffc857]'} font-medium`}>
+            <div className={`transition-colors py-4 px-8 text-sm text-white ${isFocused == 'description' && 'bg-[#ffc857]'} font-medium`}>
               <label htmlFor='title' className={`transition-all ${isFocused == 'description' && 'text-lg'}`}>
                 Description
               </label>
@@ -165,7 +165,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
               <p className={`transition-all text-sm mb-2 ${isFocused == 'repeat' && 'text-lg'}`}>Repeat On:</p>
               <input type='hidden' id='repeat' value={repeatDays} {...register('repeat', { required: true })} />
               <div className='w-8/12 mx-auto'>
-                <div className='flex flex-wrap justify-between items-center text-center gap-1'>
+                <div className='flex flex-wrap justify-between items-center text-center'>
                   {weekdays.map(day => (
                     <div key={day} className='flex-1 '>
                       <label

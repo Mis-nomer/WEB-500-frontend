@@ -21,6 +21,10 @@ const Dashboard = () => {
     getData()
   }, [])
 
+  const handleDelete = () => {
+    console.log('first')
+  }
+
   return (
     <>
       {/* <header className='fixed top-14 left-0 text-center right-0 px-4 py-1.5 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] flex items-center justify-between'>
@@ -78,7 +82,7 @@ const Dashboard = () => {
                       <tbody>
                         {userData &&
                           userData.map(user => (
-                            <tr className='text-left'>
+                            <tr key={user.name} className='text-left'>
                               <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
                                 <div className='flex items-center'>
                                   <div className='flex-shrink-0 w-10 h-10'>
@@ -102,7 +106,10 @@ const Dashboard = () => {
                                 <button className='block mb-2 hover:translate-y-1 hover:ring-2 ring-indigo-400  border-b-2 border-indigo-400 px-4 py-2 rounded-md text-indigo-400 font-semibold tracking-wide cursor-pointer transition-all'>
                                   Edit
                                 </button>
-                                <button className='block mb-2 hover:translate-y-1 hover:ring-2 ring-red-400 border-b-2 border-red-400 px-4 py-2 rounded-md text-red-400 font-semibold tracking-wide cursor-pointer transition-all'>
+                                <button
+                                  onClick={handleDelete}
+                                  className='block mb-2 hover:translate-y-1 hover:ring-2 ring-red-400 border-b-2 border-red-400 px-4 py-2 rounded-md text-red-400 font-semibold tracking-wide cursor-pointer transition-all'
+                                >
                                   Delete
                                 </button>
                               </td>

@@ -1,7 +1,10 @@
 import { IHabit } from '../../interface/habit'
+import Habit from '../../controllers/controller'
 import moment from 'moment'
+import toast, { Toaster } from 'react-hot-toast'
 
 const today = moment().format('Y-M-D')
+
 const TopSection = () => (
   <>
     <div className='bg-[#ffc857] mb-3 px-2 py-3 rounded-md flex justify-between items-center text-black'>
@@ -30,14 +33,15 @@ const TopSection = () => (
   </>
 )
 
-const MidSection = ({ listHabit, handleCheck }: { listHabit: IHabit[]; handleCheck: (a: any) => void }) => {
+const MidSection = ({ todayHabit, handleCheck }: { todayHabit: IHabit[]; handleCheck: (a: any) => void }) => {
   return (
     <div className='my-10 text-sm font-medium'>
+      <Toaster />
       <div className='p-2 rounded-md bg-[#177e89] text-white'>
-        <p className='font-bold text-lg'>Today's Habits - {listHabit.filter(h => !h.streak.includes(today)).length}</p>
+        <p className='font-bold text-lg'>Today's Habits - {todayHabit.filter(h => !h.streak.includes(today)).length}</p>
         <ul className='text-black mx-1  '>
-          {listHabit &&
-            listHabit.map(habit => (
+          {todayHabit &&
+            todayHabit.map(habit => (
               <li
                 key={String(habit._id)}
                 onClick={handleCheck}
@@ -46,9 +50,7 @@ const MidSection = ({ listHabit, handleCheck }: { listHabit: IHabit[]; handleChe
                 } 
             `}
               >
-                <p className='text-base pointer-events-none select-none'>
-                  {habit.title} - <span className='font-bold'></span>
-                </p>
+                <p className='text-base pointer-events-none select-none truncate pr-1'>{habit.title}</p>
 
                 <label
                   htmlFor={habit._id as unknown as string}
@@ -83,36 +85,39 @@ const BotSection = ({ modalState, setModalState }: { modalState: Boolean; setMod
 export default ({
   modalState,
   setModalState,
-  listHabit,
-  setListHabit,
+  todayHabit,
+  setTodayHabit,
 }: {
   modalState: Boolean
-  setModalState: any
-  listHabit: IHabit[]
-  setListHabit: any
+  setModalState: (state: Boolean) => void
+  todayHabit: IHabit[]
+  setTodayHabit: (habit: IHabit[]) => void
 }) => {
   const handleCheck = function ({ target }: any) {
     const checkbox = target.querySelector('input[type=checkbox]')
-    const updated = listHabit.map(habit => {
+
+    const updated = todayHabit.map(habit => {
       if (checkbox.id == habit._id) {
         if (habit.streak.includes(today)) {
           habit.streak = habit.streak.filter(s => s != today)
           checkbox.checked = false
         } else {
           habit.streak.push(today)
+          toast('Habit completed!')
           checkbox.checked = true
         }
       }
+      Habit.update('/habit/' + habit._id, habit)
       return habit
     })
 
-    setListHabit(updated)
+    setTodayHabit(updated)
   }
   return (
     <div id='sidebar' className='z-50 col-span-1 bg-[#084c61] text-white p-2.5 min-h-screen font-sans'>
       <TopSection />
       <hr className='opacity-50 my-3' />
-      <MidSection listHabit={listHabit} handleCheck={handleCheck} />
+      <MidSection todayHabit={todayHabit} handleCheck={handleCheck} />
       <hr className='opacity-50 my-3' />
       <BotSection modalState={modalState} setModalState={setModalState} />
     </div>
