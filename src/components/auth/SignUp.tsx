@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import Collapsible from 'react-collapsible'
+import User from '../../instance'
 const SignUp = () => {
   const signUpFormSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -9,15 +10,12 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    setValue,
-    setError,
     watch,
     formState: { errors },
-    control,
   } = useForm()
 
   const onSubmit = (data: any) => {
-    console.log(data)
+    User.post('/signup', data)
   }
 
   return (
@@ -70,7 +68,7 @@ const SignUp = () => {
                 className='p-2 w-full mt-4 border border-neutral-900 rounded-md text-sm'
               />
             </Collapsible>
-            {errors.confirmPassword && <p className='bg-red-400 text-white p-2 w-[30vw] rounded-md'>Please enter a title</p>}
+            {errors.confirmPassword && <p className='bg-red-400 text-white p-2 w-[30vw] rounded-md'>{'' + errors.confirmPassword?.message}</p>}
             <input type='submit' value='Submit' className='cursor-pointer px-5 py-1.5 bg-[#ffc857] rounded-md font-semibold' />
             <h1
               className='absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 w-max
@@ -80,12 +78,10 @@ const SignUp = () => {
             </h1>
           </div>
         </form>
-        <div className='flex gap-4 flex-col items-center'>
-          <button className='bg-[#177e89] px-6 py-2 rounded-md text-white transition-all hover:bg-[#084c61] block w-2/3'>
-            Sign up using Google Account
-          </button>
-          <button className='bg-[#177e89] px-6 py-2 rounded-md text-white transition-all hover:bg-[#084c61] block w-2/3'>
-            Quick Sign Up and Login
+        <div className='flex gap-4 flex-col items-center font-semibold'>
+          <button className='flex items-center gap-2 bg-neutral-50 px-6 py-2 rounded-md hover:text-white text-black border border-black transition-all hover:bg-[#084c61] block w-2/3'>
+            <i className='fa-brands fa-google'></i>
+            <span>Sign up using Google Account</span>
           </button>
         </div>
       </div>

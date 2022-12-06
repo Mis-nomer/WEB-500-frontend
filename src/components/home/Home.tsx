@@ -29,54 +29,61 @@ const Main = ({
   }, [isSuccess])
 
   return (
-    <div id='main' className='col-span-4 relative'>
-      {/* <Heatmap listHabit={listHabit} setListHabit={setListHabit} /> */}
-      {modalState && <SidebarModal modalState={modalState} setIsSuccess={setIsSuccess} setModalState={setModalState} />}
-      <hr />
-      <div className='mt-10 w-3/4 mx-auto'>
-        <h1 className='mx-10 px-2 py-5 text-2xl font-bold'>All Habits</h1>
-        {listHabit &&
-          listHabit.map(habit => (
-            <div key={habit._id} className='border-b transition-colors mx-10 px-2 py-2 hover:bg-neutral-200 cursor-pointer [&>*]:cursor-event-none'>
-              <Collapsible
-                trigger={
-                  <div>
-                    <div className='flex justify-between'>
-                      <p className='text-base font-semibold tracking-wide capitalize'>{habit.title}</p>
-                      <p className='px-2 py-1'>
-                        <i className='fa-solid fa-caret-down'></i>
+    <section id='main' className='col-span-4 grid grid-cols-1 md:grid-cols-5 gap-5 relative'>
+      <div className='col-span-3'>
+        {modalState && <SidebarModal modalState={modalState} setIsSuccess={setIsSuccess} setModalState={setModalState} />}
+        <hr />
+        <div className='mt-10'>
+          <h1 className='mx-10 px-2 py-5 text-2xl font-bold'>All Habits</h1>
+          {listHabit &&
+            listHabit.map(habit => (
+              <div key={habit._id} className='border-b transition-colors mx-10 px-2 py-2 hover:bg-neutral-100 cursor-pointer [&>*]:cursor-event-none'>
+                <Collapsible
+                  trigger={
+                    <div>
+                      <div className='flex justify-between'>
+                        <p className='text-base font-semibold tracking-wide capitalize'>{habit.title}</p>
+                        <p className='px-2 py-1'>
+                          <i className='fa-solid fa-ellipsis-vertical'></i>
+                        </p>
+                      </div>
+                      <p className='flex gap-1.5'>
+                        {habit.labels &&
+                          habit.labels.map(label => (
+                            <span key={label} className='lowercase text-xs bg-neutral-100 px-1.5 py-1 text-neutral-500'>
+                              {label}
+                            </span>
+                          ))}
                       </p>
                     </div>
-                    <p className='flex gap-1.5'>
-                      {habit.labels &&
-                        habit.labels.map(label => (
-                          <span className='opacity-70 lowercase text-xs bg-neutral-50 px-1.5 py-1 text-neutral-500'>{label}</span>
+                  }
+                  transitionTime={150}
+                  easing={'ease-in'}
+                >
+                  <div>
+                    <ul className='w-1/2 mx-2'>
+                      <li className='mt-2'>
+                        <p className='text-xs py-5 px-1'>{'' + habit.description}</p>
+                      </li>
+                      <li className='my-2 text-sm flex items-center'>
+                        {habit.repeat.map(wd => (
+                          <p key={wd} className={`mx-1 px-2.5 py-1 bg-white ${wd == moment().format('ddd') && 'bg-yellow-300'}`}>
+                            {wd}
+                          </p>
                         ))}
-                    </p>
+                      </li>
+                    </ul>
                   </div>
-                }
-                transitionTime={150}
-                easing={'ease-in'}
-              >
-                <ul className='w-1/2 mx-6'>
-                  <li className='mt-2'>
-                    <p className='text-xs py-5 px-1'>{'' + habit.description}</p>
-                  </li>
-                  <li className='mt-2 text-sm'>
-                    <p>
-                      {!!habit.repeat.length && 'Start on:'}
-                      {habit.repeat.map(wd => (
-                        <span className={`mx-1 px-2.5 py-1 bg-neutral-50 ${wd == moment().format('ddd') && 'bg-yellow-200'}`}>{wd}</span>
-                      ))}
-                    </p>
-                  </li>
-                </ul>
-              </Collapsible>
-            </div>
-          ))}
+                </Collapsible>
+              </div>
+            ))}
+        </div>
       </div>
-      <Toaster />
-    </div>
+      <div className='col-span-2 md:w-full w-1/2 mx-auto mt-10'>
+        <h1 className='py-5 text-2xl font-bold'>Streak Heatmap</h1>
+        <Heatmap listHabit={listHabit} setListHabit={setListHabit} />
+      </div>
+    </section>
   )
 }
 
@@ -101,6 +108,7 @@ const Home = () => {
 
   return (
     <div className='grid lg:grid-cols-5 grid-cols-1'>
+      <Toaster />
       <Sidebar setModalState={setModalState} modalState={modalState} todayHabit={todayHabit} setTodayHabit={setTodayHabit} />
       <Main modalState={modalState} setModalState={setModalState} listHabit={listHabit} setListHabit={setListHabit} />
     </div>

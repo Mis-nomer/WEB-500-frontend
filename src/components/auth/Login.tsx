@@ -38,7 +38,6 @@ const Login = () => {
           <button className='bg-[#177e89] px-6 py-2 rounded-md text-white transition-all hover:bg-[#084c61] block w-2/3'>
             Login using Google Account
           </button>
-          <button className='bg-[#177e89] px-6 py-2 rounded-md text-white transition-all hover:bg-[#084c61] block w-2/3'>Quick Login</button>
         </div>
       </div>
     </div>

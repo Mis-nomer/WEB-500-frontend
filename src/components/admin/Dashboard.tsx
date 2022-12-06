@@ -1,5 +1,4 @@
 import React, { ReactEventHandler, useEffect, useState } from 'react'
-import { Doughnut, Pie } from 'react-chartjs-2'
 import AdminSidebar from './AdminSidebar'
 import User from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
@@ -30,8 +29,9 @@ const Dashboard = () => {
   }
 
   const handleSearch = (e: React.ChangeEvent) => {
-    let input = e.target?.value
-    setSearch(input)
+    let input = e.target
+    //@ts-ignore
+    setSearch(input.value)
   }
 
   return (
@@ -129,8 +129,10 @@ const Dashboard = () => {
                                   }}
                                   disabled={!!user.role}
                                   className={`${
-                                    user.role ? 'opacity-40 pointer-event-none' : 'cursor-pointer hover:translate-y-1 hover:ring-2 ring-red-400'
-                                  } block mb-2 border-b-2 border-red-400 px-4 py-2 rounded-md text-red-400 font-semibold tracking-wide  transition-all`}
+                                    user.role
+                                      ? 'opacity-40 pointer-event-none ring-2 translate-y-1'
+                                      : 'cursor-pointer hover:translate-y-1 hover:ring-2'
+                                  } block mb-2 border-b-2 border-red-400 ring-red-400 px-4 py-2 rounded-md text-red-400 font-semibold tracking-wide transition-all`}
                                 >
                                   Delete
                                 </button>

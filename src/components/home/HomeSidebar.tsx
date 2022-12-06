@@ -103,8 +103,8 @@ export default ({
           checkbox.checked = false
         } else {
           habit.streak.push(today)
-          toast('Habit completed!')
           checkbox.checked = true
+          toast('Habit completed!')
         }
       }
       Habit.update('/habit/' + habit._id, habit)

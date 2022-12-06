@@ -18,7 +18,6 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
   // component states & variables
   const [isFocused, setIsFocused] = useState('none')
   const [repeatDays, setRepeatDays] = useState<string[]>([])
-  const [tagValue, setTagValue] = useState<(IOption | null)[]>([])
   const {
     register,
     handleSubmit,
@@ -52,22 +51,21 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
   // create new label from select input
   const createTag = (label: string): IOption => ({
     label,
-    value: label.toLowerCase().replace(/\W/g, ''),
+    value: label.replace(/\W/g, ''),
   })
 
   const handleCreate = (inputTag: string) => {
     const newTag = createTag(inputTag)
     setTagList(prev => [...prev, newTag])
-    setTagValue([...tagValue, newTag])
   }
 
   // Select Input
-  const detaultTags = [createTag('One'), createTag('Two'), createTag('Three')]
+  const detaultTags = [createTag('Prioritize'), createTag('Exercise'), createTag('Food'), createTag('Social'), createTag('Skill')]
   const [tagList, setTagList] = useState(detaultTags)
 
   return (
     <div>
-      <div className={`absolute  inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center pt-10 md:pt-0`}>
+      <div className={`absolute inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center pt-10 md:pt-0`}>
         <div className={`relative w-10/12 md:w-1/2 rounded-md shadow-lg bg-[#084c61] transition-opacity duration-300`}>
           <form onSubmit={handleSubmit(data => onSubmit(data as IHabit))} onBlur={() => setIsFocused('none')}>
             {/* Title */}
@@ -99,12 +97,14 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
                     className='w-full block my-1 focus:outline-none text-medium text-[#084c61]'
                     value={tagList.filter(c => value.includes(c.value))}
                     onChange={selected => {
-                      setTagValue(selected as IOption[])
                       onChange(selected.map(c => c.value))
                     }}
                     options={tagList}
                     onFocus={() => setIsFocused('tagList')}
-                    onCreateOption={handleCreate}
+                    onCreateOption={newTag => {
+                      handleCreate(newTag)
+                      onChange([...value, newTag])
+                    }}
                     styles={{
                       control: baseStyles => ({
                         ...baseStyles,

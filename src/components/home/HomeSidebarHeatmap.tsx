@@ -47,15 +47,28 @@ export default function ({ listHabit, setListHabit }: { listHabit: IHabit[]; set
   const prevMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD hh:mm')
   const nextMonthLastDay = moment().add(1, 'months').endOf('month').format('YYYY-MM-DD hh:mm')
 
-  let data = listHabit.map(habit => {
-    let date = moment(habit.startDate).format('Y-M-D')
-    let count = habit.streak.length
-    return { date, count }
-  })
+  let data = listHabit.reduce((arr: { date: string; count: number }[], habit) => {
+    habit.streak.forEach(date => {
+      const streakDateExist = arr.find(h => h.date == date)
 
+      if (!streakDateExist) {
+        // @ts-ignore
+        const entry = new Map([
+          ['date', date],
+          ['count', 1],
+        ])
+        // @ts-ignore
+        arr.push(Object.fromEntries(entry))
+      } else {
+        streakDateExist.count++
+      }
+    })
+    return arr
+  }, [])
+  console.log(data)
   return (
     <Style>
-      <div className='w-[50%] mx-auto'>
+      <div className=''>
         <CalendarHeatmap
           startDate={prevMonthFirstDay}
           endDate={nextMonthLastDay}
@@ -67,6 +80,7 @@ export default function ({ listHabit, setListHabit }: { listHabit: IHabit[]; set
             return `color-github-${value.count}`
           }}
           showWeekdayLabels={true}
+          horizontal={false}
           weekdayLabels={['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']}
           onClick={value => {
             console.log(`value count: ${value?.count}`)
