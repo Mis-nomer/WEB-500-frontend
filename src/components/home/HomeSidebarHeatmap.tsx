@@ -43,7 +43,7 @@ const Style = styled.div/*css*/ `
   }
 `
 
-export default function ({ listHabit, setListHabit }: { listHabit: IHabit[]; setListHabit: any }) {
+export default function ({ listHabit }: { listHabit: IHabit[] }) {
   const prevMonthFirstDay = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD hh:mm')
   const nextMonthLastDay = moment().add(1, 'months').endOf('month').format('YYYY-MM-DD hh:mm')
 
@@ -65,7 +65,7 @@ export default function ({ listHabit, setListHabit }: { listHabit: IHabit[]; set
     })
     return arr
   }, [])
-  console.log(data)
+
   return (
     <Style>
       <div className=''>

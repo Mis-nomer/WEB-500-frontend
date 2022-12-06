@@ -1,7 +1,8 @@
 import { IHabit } from '../../interface/habit'
 import Habit from '../../controllers/controller'
 import moment from 'moment'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
+import { useEffect } from 'react'
 
 const today = moment().format('Y-M-D')
 
@@ -36,7 +37,6 @@ const TopSection = () => (
 const MidSection = ({ todayHabit, handleCheck }: { todayHabit: IHabit[]; handleCheck: (a: any) => void }) => {
   return (
     <div className='my-10 text-sm font-medium'>
-      <Toaster />
       <div className='p-2 rounded-md bg-[#177e89] text-white'>
         <p className='font-bold text-lg'>Today's Habits - {todayHabit.filter(h => !h.streak.includes(today)).length}</p>
         <ul className='text-black mx-1  '>
@@ -83,16 +83,24 @@ const BotSection = ({ modalState, setModalState }: { modalState: Boolean; setMod
 }
 
 export default ({
+  habitState,
   modalState,
   setModalState,
   todayHabit,
   setTodayHabit,
 }: {
+  habitState: string
   modalState: Boolean
   setModalState: (state: Boolean) => void
   todayHabit: IHabit[]
   setTodayHabit: (habit: IHabit[]) => void
 }) => {
+  const config = { params: { email: 'Judson.Kirlin@gmail.com' } }
+
+  useEffect(() => {
+    Habit.read('/habit/', config).then(res => res.data.data).then(setTodayHabit)
+  }, [habitState])
+
   const handleCheck = function ({ target }: any) {
     const checkbox = target.querySelector('input[type=checkbox]')
 

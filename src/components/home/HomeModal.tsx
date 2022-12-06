@@ -14,7 +14,15 @@ interface IOption {
 
 const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-export default function ({ modalState, setModalState, setIsSuccess }: { modalState: Boolean; setModalState: any; setIsSuccess: any }) {
+export default function ({
+  modalState,
+  setModalState,
+  setHabitState,
+}: {
+  modalState: Boolean
+  setHabitState: (state: string) => void
+  setModalState: (state: Boolean) => void
+}) {
   // component states & variables
   const [isFocused, setIsFocused] = useState('none')
   const [repeatDays, setRepeatDays] = useState<string[]>([])
@@ -30,7 +38,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
     data.email = 'Judson.Kirlin@gmail.com'
     Habit.add('/habit/', data).then(() => {
       setModalState(!modalState)
-      setIsSuccess(true)
+      setHabitState('create')
     })
   }
 
