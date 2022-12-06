@@ -1,6 +1,7 @@
 import Heatmap from './HomeSidebarHeatmap'
 import Sidebar from './HomeSidebar'
 import SidebarModal from './HomeModal'
+import Collapsible from 'react-collapsible'
 import { useState, useEffect } from 'react'
 import Habit from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
@@ -32,20 +33,45 @@ const Main = ({
       {/* <Heatmap listHabit={listHabit} setListHabit={setListHabit} /> */}
       {modalState && <SidebarModal modalState={modalState} setIsSuccess={setIsSuccess} setModalState={setModalState} />}
       <hr />
-      <div className='mt-10'>
-        <h1 className='mx-10 px-2 py-5 text-xl font-bold'>All Habits</h1>
+      <div className='mt-10 w-3/4 mx-auto'>
+        <h1 className='mx-10 px-2 py-5 text-2xl font-bold'>All Habits</h1>
         {listHabit &&
           listHabit.map(habit => (
-            <div
-              data-expand={false}
-              key={habit._id}
-              className='transition-colors mx-10 px-2 py-5 hover:bg-neutral-200 cursor-pointer [&>*]:cursor-event-none'
-            >
-              <p className='font-semibold tracking-wide capitalize'>
-                <i className='fa-solid fa-thumbtack px-2 text-[#ffc857]'></i>
-                {habit.title}
-              </p>
-              <p className='text-xs truncate w-1/2 mx-2'>{'' + habit.description}</p>
+            <div key={habit._id} className='border-b transition-colors mx-10 px-2 py-2 hover:bg-neutral-200 cursor-pointer [&>*]:cursor-event-none'>
+              <Collapsible
+                trigger={
+                  <div>
+                    <div className='flex justify-between'>
+                      <p className='text-base font-semibold tracking-wide capitalize'>{habit.title}</p>
+                      <p className='px-2 py-1'>
+                        <i className='fa-solid fa-caret-down'></i>
+                      </p>
+                    </div>
+                    <p className='flex gap-1.5'>
+                      {habit.labels &&
+                        habit.labels.map(label => (
+                          <span className='opacity-70 lowercase text-xs bg-neutral-50 px-1.5 py-1 text-neutral-500'>{label}</span>
+                        ))}
+                    </p>
+                  </div>
+                }
+                transitionTime={150}
+                easing={'ease-in'}
+              >
+                <ul className='w-1/2 mx-6'>
+                  <li className='mt-2'>
+                    <p className='text-xs py-5 px-1'>{'' + habit.description}</p>
+                  </li>
+                  <li className='mt-2 text-sm'>
+                    <p>
+                      {!!habit.repeat.length && 'Start on:'}
+                      {habit.repeat.map(wd => (
+                        <span className={`mx-1 px-2.5 py-1 bg-neutral-50 ${wd == moment().format('ddd') && 'bg-yellow-200'}`}>{wd}</span>
+                      ))}
+                    </p>
+                  </li>
+                </ul>
+              </Collapsible>
             </div>
           ))}
       </div>

@@ -81,7 +81,7 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
                 type='text'
                 id='title'
                 className='w-full block p-2 my-1 focus:outline-none text-medium text-[#084c61] rounded-sm'
-                {...register('title', { required: true, maxLength: 100 })}
+                {...register('title', { required: true, maxLength: 150 })}
               />
               {errors.title && <p className='bg-red-500 p-2 mt-2 rounded-md'>Please enter a title</p>}
             </div>
@@ -150,12 +150,13 @@ export default function ({ modalState, setModalState, setIsSuccess }: { modalSta
                 Description
               </label>
               <textarea
-                {...register('description', { maxLength: 300 })}
+                {...register('description', { maxLength: 500 })}
                 onFocus={() => setIsFocused('description')}
                 name='description'
                 id='description'
                 className='w-full block p-2 my-1 h-[15vh] focus:outline-none rounded-md text-[#084c61] resize-none'
               ></textarea>
+              {errors.description && <p className='bg-red-500 p-2 mt-2 rounded-md'>Maximum 600 characters reached</p>}
             </div>
             {/* Repeat Day */}
             <div

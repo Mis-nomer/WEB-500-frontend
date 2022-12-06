@@ -12,24 +12,24 @@ const TopSection = () => (
         <span>Settings</span>
       </a>
     </div>
-    <div>
-      <div className='p-3 pb-5 [&>span]:bg-[#ffc857] [&>hr]:hover:opacity-0 [&>span]:hover:bg-transparent hover:translate-x-2 hover:scale-110 hover:shadow-xl hover:-skew-y-3 hover:bg-[#177e89] hover:text-white hover:cursor-pointer transition-all ease-in'>
+    <div className="text-white">
+      <div className='p-3 pb-5 [&>span]:bg-[#177e89] [&>hr]:hover:opacity-0 [&>span]:hover:bg-transparent hover:translate-x-2 hover:scale-110 hover:shadow-xl hover:-skew-y-3 hover:bg-[#ffc857] hover:text-black hover:cursor-pointer transition-all ease-in'>
         <i className='fa-regular fa-user pointer-events-none'></i>
         <span className='px-2 pointer-events-none font-semibold transition-all duration-75'>User Analytics</span>
-        <hr className='border-black block -mt-2.5' />
+        <hr className='border-white block -mt-2.5' />
       </div>
-      <div className='p-3 pb-5 [&>span]:bg-[#ffc857] [&>hr]:hover:opacity-0 [&>span]:hover:bg-transparent hover:translate-x-2 hover:scale-110 hover:shadow-xl hover:-skew-y-3 hover:bg-[#177e89] hover:text-white hover:cursor-pointer transition-all ease-in'>
+      <div className='p-3 pb-5 [&>span]:bg-[#177e89] [&>hr]:hover:opacity-0 [&>span]:hover:bg-transparent hover:translate-x-2 hover:scale-110 hover:shadow-xl hover:-skew-y-3 hover:bg-[#ffc857] hover:text-black hover:cursor-pointer transition-all ease-in'>
         <i className='fa-regular fa-calendar pointer-events-none'></i>
         <span className='px-2 pointer-events-none font-semibold transition-all'>Habit Analytics</span>
-        <hr className='border-black block -mt-2.5' />
+        <hr className='border-white block -mt-2.5' />
       </div>
     </div>
   </>
 )
-//bg-[#084c61] bg-[#ffc857] bg-[#177e89]
+//bg-[#084c61] bg-[#177e89]
 export default () => {
   return (
-    <div id='sidebar' className='z-50 col-span-1 bg-[#ffc857] text-black min-h-screen font-sans'>
+    <div id='sidebar' className='z-50 col-span-1 bg-[#177e89] text-black min-h-screen font-sans'>
       <TopSection />
     </div>
   )

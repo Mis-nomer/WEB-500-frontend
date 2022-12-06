@@ -1,28 +1,37 @@
-import { useEffect, useState } from 'react'
+import React, { ReactEventHandler, useEffect, useState } from 'react'
 import { Doughnut, Pie } from 'react-chartjs-2'
 import AdminSidebar from './AdminSidebar'
 import User from '../../controllers/controller'
+import toast, { Toaster } from 'react-hot-toast'
 
 interface IUser {
   name: string
   email: string
   avatar: string
+  createdDate: Date
+  role: number
 }
 const Dashboard = () => {
   const [userData, setUserData] = useState<IUser[]>([])
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
-    const getData = () => {
-      User.read('/users/')
-        .then(res => res.data)
-        .then(res => res.map((data: any) => ({ name: data?.name, email: data.email, avatar: data.avatar })))
-        .then(data => setUserData(data))
-    }
-    getData()
-  }, [])
+    User.read('/users/').then(res =>
+      setUserData(res.data.filter((user: IUser) => user.name.toLowerCase().includes(search) || user.email.toLowerCase().includes(search)))
+    )
+  }, [search])
 
-  const handleDelete = () => {
-    console.log('first')
+  const handleDelete = (user: {}) => {
+    if (confirm('Confirm action')) {
+      User.delete('/users/', user)
+      User.read('/users/').then(res => setUserData(res.data))
+      toast('User deleted!')
+    }
+  }
+
+  const handleSearch = (e: React.ChangeEvent) => {
+    let input = e.target?.value
+    setSearch(input)
   }
 
   return (
@@ -33,6 +42,7 @@ const Dashboard = () => {
         </div>
       </header> */}
       <div className='grid lg:grid-cols-5 grid-cols-1'>
+        <Toaster />
         <AdminSidebar></AdminSidebar>
         <div className='p-6 mt-10 overflow-hidden col-span-4 text-center'>
           <section className='flex justify-evenly flex-wrap bg-white mt-5 rounded-md p-5'>
@@ -45,11 +55,18 @@ const Dashboard = () => {
                   <h2 className='text-gray-600 font-semibold'>User list</h2>
                   <span className='text-xs'>All user</span>
                 </div>
-                <div className='flex items-center justify-between'>
+                <div className='flex items-center'>
                   <div className='flex bg-neutral-100 items-center p-2 rounded-md'>
-                    <input className='bg-neutral-100 outline-none ml-1 block' type='text' name='' id='' placeholder='search...' />
+                    <input
+                      onChange={e => handleSearch(e)}
+                      className='bg-neutral-100 outline-none block'
+                      type='text'
+                      name=''
+                      id=''
+                      placeholder='search user...'
+                    />
                   </div>
-                  <div className='lg:ml-40 ml-10 space-x-8'>
+                  <div className='lg:ml-10 space-x-8 justify-self-start'>
                     <button className='hover:brightness-90 bg-[#ffc857] px-4 py-2 rounded-md text-black font-semibold tracking-wide cursor-pointer'>
                       Create
                     </button>
@@ -94,7 +111,7 @@ const Dashboard = () => {
                                 </div>
                               </td>
                               <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm '>
-                                <p className='text-gray-900 whitespace-no-wrap'>Admin</p>
+                                <p className='text-gray-900 whitespace-no-wrap'>{user.role ? 'Admin' : 'User'}</p>
                               </td>
                               <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
                                 <p className='text-gray-900 whitespace-no-wrap'>{user.email}</p>
@@ -107,8 +124,13 @@ const Dashboard = () => {
                                   Edit
                                 </button>
                                 <button
-                                  onClick={handleDelete}
-                                  className='block mb-2 hover:translate-y-1 hover:ring-2 ring-red-400 border-b-2 border-red-400 px-4 py-2 rounded-md text-red-400 font-semibold tracking-wide cursor-pointer transition-all'
+                                  onClick={() => {
+                                    handleDelete(user)
+                                  }}
+                                  disabled={!!user.role}
+                                  className={`${
+                                    user.role ? 'opacity-40 pointer-event-none' : 'cursor-pointer hover:translate-y-1 hover:ring-2 ring-red-400'
+                                  } block mb-2 border-b-2 border-red-400 px-4 py-2 rounded-md text-red-400 font-semibold tracking-wide  transition-all`}
                                 >
                                   Delete
                                 </button>
