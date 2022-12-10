@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
+    "@types/animejs": "^3.1.6",
     "@types/react-calendar-heatmap": "^1.6.3",
     "@types/react-datepicker": "^4.8.0",
     "@types/react-modal": "^3.13.1",
