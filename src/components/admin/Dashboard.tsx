@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
 import User from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
@@ -18,7 +18,7 @@ const Dashboard = () => {
     User.read('/users/').then(res =>
       setUserData(res.data.filter((user: IUser) => user.name.toLowerCase().includes(search) || user.email.toLowerCase().includes(search)))
     )
-  }, [search])
+  }, [])
 
   const handleDelete = (user: {}) => {
     if (confirm('Confirm action')) {
