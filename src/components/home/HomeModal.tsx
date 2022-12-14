@@ -5,6 +5,7 @@ import CreatableSelect from 'react-select/creatable'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useForm, Controller } from 'react-hook-form'
 import { IHabit } from '../../interface/habit'
+import { toast, Toaster } from 'react-hot-toast'
 
 // Global interfaces & variables
 interface IOption {
@@ -36,10 +37,14 @@ export default function ({
 
   const onSubmit = (data: IHabit) => {
     data.email = 'Judson.Kirlin@gmail.com'
-    Habit.add('/habit/', data).then(() => {
-      setModalState(!modalState)
-      setHabitState('create')
-    })
+    Habit.add('/habit/', data)
+      .then(() => {
+        setModalState(!modalState)
+        setHabitState('create')
+      })
+      .catch(() => {
+        toast.error("Can't connect to the server, please try again later!")
+      })
   }
 
   // handle weekday select
@@ -73,8 +78,9 @@ export default function ({
 
   return (
     <div>
-      <div className={`absolute inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center pt-10 md:pt-0`}>
-        <div className={`relative w-10/12 md:w-1/2 rounded-md shadow-lg bg-[#084c61] transition-opacity duration-300`}>
+      <Toaster />
+      <div className={`absolute -sm:pt-10 inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center `}>
+        <div className={`relative sm:w-1/2 w-full shadow-lg bg-[#084c61] transition-opacity duration-300`}>
           <form onSubmit={handleSubmit(data => onSubmit(data as IHabit))} onBlur={() => setIsFocused('none')}>
             {/* Title */}
             <div className={`transition-colors pb-4 pt-6 px-8 text-sm text-white ${isFocused == 'title' && 'bg-[#ffc857]'} font-medium`}>

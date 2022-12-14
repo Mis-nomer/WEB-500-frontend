@@ -98,7 +98,12 @@ export default ({
   const config = { params: { email: 'Judson.Kirlin@gmail.com' } }
 
   useEffect(() => {
-    Habit.read('/habit/', config).then(res => res.data.data).then(setTodayHabit)
+    Habit.read('/habit/', config)
+      .then(res => res.data.data)
+      .then(setTodayHabit)
+      .catch(() => {
+        setTodayHabit([{ title: '503: Service Unavailable', email: '', labels: [], streak: [] }])
+      })
   }, [habitState])
 
   const handleCheck = function ({ target }: any) {

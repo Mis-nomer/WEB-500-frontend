@@ -4,8 +4,11 @@ import Admin from './components/admin/Dashboard'
 import SignUp from './components/auth/SignUp'
 import Login from './components/auth/Login'
 import Greet from './components/Greet'
+import { useState } from 'react'
 
 function App() {
+  const [userData, setUserData] = useState({})
+
   return (
     <>
       <Routes>

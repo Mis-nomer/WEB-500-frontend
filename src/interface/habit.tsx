@@ -3,14 +3,14 @@ export interface IHabit {
   email: string
   title: string
   labels: string[]
-  description: {
+  description?: {
     maxLength: 300
     type: string
   }
-  repeat: string[]
+  repeat?: string[]
   streak: string[]
-  startDate: Date
-  options: {
+  startDate?: Date
+  options?: {
     reminder: boolean
   }
 }

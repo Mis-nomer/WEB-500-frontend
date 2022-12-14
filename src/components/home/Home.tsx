@@ -2,7 +2,7 @@ import Heatmap from './HomeSidebarHeatmap'
 import Sidebar from './HomeSidebar'
 import SidebarModal from './HomeModal'
 import Collapsible from 'react-collapsible'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Habit from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
 import { IHabit } from '../../interface/habit'
@@ -68,11 +68,12 @@ const Main = ({
                       </li>
                       <li className='my-2 text-sm flex items-center justify-between'>
                         <div className='flex items-center'>
-                          {habit.repeat.map(wd => (
-                            <p key={wd} className={`mx-1 px-2.5 py-1 bg-white ${wd == moment().format('ddd') && 'bg-yellow-300'}`}>
-                              {wd}
-                            </p>
-                          ))}
+                          {habit.repeat &&
+                            habit.repeat.map(wd => (
+                              <p key={wd} className={`mx-1 px-2.5 py-1 bg-white ${wd == moment().format('ddd') && 'bg-yellow-300'}`}>
+                                {wd}
+                              </p>
+                            ))}
                         </div>
                         <div>
                           <button

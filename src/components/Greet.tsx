@@ -35,21 +35,21 @@ const Greet = () => {
   }, [])
   return (
     <div className='bg-[#ffc857] w-screen h-screen overflow-hidden'>
-      <div className='boxtrox w-2/12 mx-auto'>
+      <div className='boxtrox w-3/12 mx-auto'>
         <span className='text-2xl font-bold'>Starting a new habit?</span>
-        <span className='text-sm font-medium opacity-50 '>Track your progress with</span>
+        <span className='text-sm mt-1 font-medium px-1 py-1.5 text-[#084c61] w-full block'>Track your progress with</span>
         <Link to='home'>
-          <img src='./logo-black.png' className='logo mt-3' />
+          <img src='./logo-black.png' className='logo hover:invert' />
         </Link>
         <div className='auth opacity-0 mt-10'>
-          <p className='bg-neutral-800 text-white px-3 py-1 flex items-center justify-between rounded-md'>
-            <span className='text-[#ffc857]'>
-              <Link to='signin'>Login</Link>
-            </span>
-            <span className=' text-[#ffc857] bg-neutral-800'>
-              <Link to='signup'>Register</Link>
-            </span>
-          </p>
+          <div className='text-[#084c61] grid grid-cols-2 items-center rounded-m font-semibold'>
+            <button className='px-1 py-1.5 hover:border-[#084c61] hover:-skew-x-3 hover:-skew-y-3 border-r-4 border-transparent hover:-translate-x-2 transition-all'>
+              <Link to='login'>Login</Link>
+            </button>
+            <button className='px-1 py-1.5 hover:skew-x-3 hover:skew-y-3 hover:border-[#084c61] border-l-4 border-transparent hover:translate-x-2 transition-all'>
+              <Link to='sign-up'>Register</Link>
+            </button>
+          </div>
         </div>
       </div>
     </div>
