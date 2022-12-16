@@ -5,7 +5,7 @@ import Collapsible from 'react-collapsible'
 import { useState, useEffect } from 'react'
 import Habit from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
-import { IHabit } from '../../interface/habit'
+import { IHabit } from '../../interface'
 import moment from 'moment'
 
 const config = { params: { email: 'Judson.Kirlin@gmail.com' } }
@@ -24,7 +24,7 @@ const Main = ({
   // useReducer here
   const handleDelete = (id: number | undefined) => {
     if (confirm("Don't you want to delete this habit?")) {
-      Habit.delete('/habit/' + id)
+      Habit.delete('/data/habit/' + id)
       setHabitState('delete')
     }
   }
@@ -69,7 +69,7 @@ const Main = ({
                       <li className='my-2 text-sm flex items-center justify-between'>
                         <div className='flex items-center'>
                           {habit.repeat &&
-                            habit.repeat.map(wd => (
+                             habit.repeat.map(wd => (
                               <p key={wd} className={`mx-1 px-2.5 py-1 bg-white ${wd == moment().format('ddd') && 'bg-yellow-300'}`}>
                                 {wd}
                               </p>
@@ -115,15 +115,15 @@ const Home = () => {
       toast('Habit deleted!')
     }
 
-    Habit.read('/habit/', config)
-      .then(res => res.data)
-      .then(res => {
-        // render if habit repeat today, ignore if startDate haven't come
-        let todayWeekday = moment().format('ddd')
-        let todayList = res.data.filter((h: IHabit) => h.repeat?.includes(todayWeekday) && moment().diff(h.startDate, 'days') >= 0)
-        setListHabit(res.data)
-        setTodayHabit(todayList)
-      })
+    // Habit.read('/data/habit/', config)
+    //   .then(res => res.data)
+    //   .then(res => {
+    //     // render if habit repeat today, ignore if startDate haven't come
+    //     let todayWeekday = moment().format('ddd')
+    //     let todayList = res.data.filter((h: IHabit) => h.repeat?.includes(todayWeekday) && moment().diff(h.startDate, 'days') >= 0)
+    //     setListHabit(res.data)
+    //     setTodayHabit(todayList)
+    //   })
   }, [habitState])
 
   return (

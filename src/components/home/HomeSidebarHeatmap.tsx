@@ -2,7 +2,7 @@ import CalendarHeatmap from 'react-calendar-heatmap'
 import styled from 'styled-components'
 import 'react-calendar-heatmap/dist/styles.css'
 import moment from 'moment'
-import { IHabit } from '../../interface/habit'
+import { IHabit } from '../../interface'
 
 const Style = styled.div/*css*/ `
   & .react-calendar-heatmap text {

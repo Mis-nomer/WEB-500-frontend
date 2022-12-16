@@ -14,3 +14,16 @@ export interface IHabit {
     reminder: boolean
   }
 }
+
+export interface IUser {
+  avatar?: string
+  name?: string
+  password?: string
+  email?: string
+  isAdmin?: boolean
+  token?: string
+  isLoggedIn?: {
+    type: boolean
+    default: false
+  }
+}

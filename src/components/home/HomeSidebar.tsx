@@ -1,21 +1,19 @@
-import { IHabit } from '../../interface/habit'
+import { IHabit } from '../../interface'
 import Habit from '../../controllers/controller'
 import moment from 'moment'
 import toast from 'react-hot-toast'
-import { useEffect } from 'react'
-
+import { useEffect, useContext } from 'react'
+import { UserContext } from '../../contexts/userContext'
+import { AxiosError } from 'axios'
+import { IUser } from '../../interface'
 const today = moment().format('Y-M-D')
 
-const TopSection = () => (
+const TopSection = ({ user }: { user: IUser }) => (
   <>
     <div className='bg-[#ffc857] mb-3 px-2 py-3 rounded-md flex justify-between items-center text-black'>
       <div>
-        <img
-          src='https://d33wubrfki0l68.cloudfront.net/56b13b3bf4c6a968ed185545896004efbe836a25/c7537/assets/rob@120w.c8436c81.webp'
-          alt=''
-          className='object-cover w-[32px] h-[32px] rounded-full inline-block'
-        />
-        <span className='px-2 font-semibold font-sans'>Username</span>
+        <img src={user.avatar} alt='' className='object-cover w-[32px] h-[32px] rounded-full inline-block' />
+        <span className='px-2 font-semibold font-sans'>{user.name}</span>
       </div>
       <div className='hover:scale-125 transition-transform cursor-pointer'>
         <i className='fa-solid fa-user-gear'></i>
@@ -95,14 +93,16 @@ export default ({
   todayHabit: IHabit[]
   setTodayHabit: (habit: IHabit[]) => void
 }) => {
-  const config = { params: { email: 'Judson.Kirlin@gmail.com' } }
-
+  const { user } = useContext(UserContext)
+  const config = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
   useEffect(() => {
-    Habit.read('/habit/', config)
+    Habit.read('/data/habit/', config)
       .then(res => res.data.data)
       .then(setTodayHabit)
-      .catch(() => {
-        setTodayHabit([{ title: '503: Service Unavailable', email: '', labels: [], streak: [] }])
+      .catch(err => {
+        let res = (err as AxiosError).response
+        let message = (res?.data as object | string)?.toString()
+        console.error(message)
       })
   }, [habitState])
 
@@ -120,7 +120,7 @@ export default ({
           toast('Habit completed!')
         }
       }
-      Habit.update('/habit/' + habit._id, habit)
+      Habit.update('/data/habit/' + habit._id, habit)
       return habit
     })
 
@@ -128,7 +128,7 @@ export default ({
   }
   return (
     <div id='sidebar' className='z-50 col-span-1 bg-[#084c61] text-white p-2.5 min-h-screen font-sans'>
-      <TopSection />
+      <TopSection user={user as IUser} />
       <hr className='opacity-50 my-3' />
       <MidSection todayHabit={todayHabit} handleCheck={handleCheck} />
       <hr className='opacity-50 my-3' />
