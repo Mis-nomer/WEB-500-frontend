@@ -1,25 +1,22 @@
 import { Link } from 'react-router-dom'
-import User from '../../instance'
+import User from '../../api/instance'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Toaster, toast } from 'react-hot-toast'
 import { AxiosError } from 'axios'
-import { UserContext } from '../../contexts/userContext'
-import { useContext } from 'react'
 
 const Login = () => {
   const { register, handleSubmit } = useForm()
-  const { setUser } = useContext(UserContext)
   const nav = useNavigate()
 
   const handleSignin = handleSubmit(async data => {
     try {
-      let res = await User.post('user/signin', data)
+      let res = await User.post('auth/signin', data)
       let user = res.data.user
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('user', JSON.stringify(user))
 
       //@ts-ignore
-      setUser(user)
       setTimeout(() => nav('/home'), 1000)
       toast.success('Login Successful')
     } catch (err) {

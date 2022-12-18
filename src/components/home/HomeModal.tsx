@@ -1,13 +1,11 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Habit from '../../controllers/controller'
 import DatePicker from 'react-datepicker'
 import CreatableSelect from 'react-select/creatable'
 import { useForm, Controller } from 'react-hook-form'
-import { IHabit } from '../../interface'
-import { UserContext } from '../../contexts/userContext'
 import { toast, Toaster } from 'react-hot-toast'
 import 'react-datepicker/dist/react-datepicker.css'
-
+import { IHabit } from '../../api/interface'
 // Global interfaces & variables
 interface IOption {
   readonly label: string
@@ -26,7 +24,9 @@ export default function ({
   setModalState: (state: Boolean) => void
 }) {
   // component states & variables
-  const { user } = useContext(UserContext)
+  const user = JSON.parse(localStorage.getItem('user') as string) ?? {}
+  const config = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+
   const [isFocused, setIsFocused] = useState('none')
   const [repeatDays, setRepeatDays] = useState<string[]>([])
   const {
@@ -38,8 +38,8 @@ export default function ({
   } = useForm()
 
   const onSubmit = (data: IHabit) => {
-    data.email = user?.email as string
-    Habit.add('/data/habit/', data)
+    data.email = user.email
+    Habit.add('/data/habit/', data, config)
       .then(() => {
         setModalState(!modalState)
         setHabitState('create')

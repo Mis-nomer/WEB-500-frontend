@@ -1,36 +1,39 @@
-import { IHabit } from '../../interface'
+import { IHabit } from '../../api/interface'
 import Habit from '../../controllers/controller'
 import moment from 'moment'
 import toast from 'react-hot-toast'
-import { useEffect, useContext } from 'react'
-import { UserContext } from '../../contexts/userContext'
+import { useEffect } from 'react'
+import { logError } from '../../api/utils'
 import { AxiosError } from 'axios'
-import { IUser } from '../../interface'
 const today = moment().format('Y-M-D')
 
-const TopSection = ({ user }: { user: IUser }) => (
-  <>
-    <div className='bg-[#ffc857] mb-3 px-2 py-3 rounded-md flex justify-between items-center text-black'>
+const TopSection = () => {
+  const user = JSON.parse(localStorage.getItem('user') as string) ?? {}
+
+  return (
+    <>
+      <div className='bg-[#ffc857] mb-3 px-2 py-3 rounded-md flex justify-between items-center text-black'>
+        <div>
+          <img src={user.avatar} alt='' className='object-cover w-[32px] h-[32px] rounded-full inline-block' />
+          <span className='px-2 font-semibold font-sans'>{user.name}</span>
+        </div>
+        <div className='hover:scale-125 transition-transform cursor-pointer'>
+          <i className='fa-solid fa-user-gear'></i>
+        </div>
+      </div>
       <div>
-        <img src={user.avatar} alt='' className='object-cover w-[32px] h-[32px] rounded-full inline-block' />
-        <span className='px-2 font-semibold font-sans'>{user.name}</span>
+        <div className='p-2 rounded-md hover:bg-[#177e89] hover:cursor-pointer transition-colors'>
+          <i className='fa-regular fa-calendar pointer-events-none'></i>
+          <span className='px-3 pointer-events-none'>All Habits</span>
+        </div>
+        <div className='p-2 rounded-md hover:bg-[#177e89] hover:cursor-pointer transition-colors'>
+          <i className='fa-regular fa-bookmark'></i>
+          <span className='px-3'>Labels</span>
+        </div>
       </div>
-      <div className='hover:scale-125 transition-transform cursor-pointer'>
-        <i className='fa-solid fa-user-gear'></i>
-      </div>
-    </div>
-    <div>
-      <div className='p-2 rounded-md hover:bg-[#177e89] hover:cursor-pointer transition-colors'>
-        <i className='fa-regular fa-calendar pointer-events-none'></i>
-        <span className='px-3 pointer-events-none'>All Habits</span>
-      </div>
-      <div className='p-2 rounded-md hover:bg-[#177e89] hover:cursor-pointer transition-colors'>
-        <i className='fa-regular fa-bookmark'></i>
-        <span className='px-3'>Labels</span>
-      </div>
-    </div>
-  </>
-)
+    </>
+  )
+}
 
 const MidSection = ({ todayHabit, handleCheck }: { todayHabit: IHabit[]; handleCheck: (a: any) => void }) => {
   return (
@@ -93,17 +96,12 @@ export default ({
   todayHabit: IHabit[]
   setTodayHabit: (habit: IHabit[]) => void
 }) => {
-  const { user } = useContext(UserContext)
   const config = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
   useEffect(() => {
     Habit.read('/data/habit/', config)
       .then(res => res.data.data)
       .then(setTodayHabit)
-      .catch(err => {
-        let res = (err as AxiosError).response
-        let message = (res?.data as object | string)?.toString()
-        console.error(message)
-      })
+      .catch(logError)
   }, [habitState])
 
   const handleCheck = function ({ target }: any) {
@@ -128,7 +126,7 @@ export default ({
   }
   return (
     <div id='sidebar' className='z-50 col-span-1 bg-[#084c61] text-white p-2.5 min-h-screen font-sans'>
-      <TopSection user={user as IUser} />
+      <TopSection />
       <hr className='opacity-50 my-3' />
       <MidSection todayHabit={todayHabit} handleCheck={handleCheck} />
       <hr className='opacity-50 my-3' />

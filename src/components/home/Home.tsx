@@ -1,14 +1,13 @@
-import Heatmap from './HomeSidebarHeatmap'
 import Sidebar from './HomeSidebar'
 import SidebarModal from './HomeModal'
 import Collapsible from 'react-collapsible'
 import { useState, useEffect } from 'react'
 import Habit from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
-import { IHabit } from '../../interface'
+import { IHabit } from '../../api/interface'
 import moment from 'moment'
 
-const config = { params: { email: 'Judson.Kirlin@gmail.com' } }
+const config = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
 
 const Main = ({
   modalState,
@@ -22,9 +21,9 @@ const Main = ({
   setHabitState: (state: string) => void
 }) => {
   // useReducer here
-  const handleDelete = (id: number | undefined) => {
+  const handleDelete = (id: number) => {
     if (confirm("Don't you want to delete this habit?")) {
-      Habit.delete('/data/habit/' + id)
+      Habit.delete('/data/habit/' + id, config)
       setHabitState('delete')
     }
   }
@@ -69,7 +68,7 @@ const Main = ({
                       <li className='my-2 text-sm flex items-center justify-between'>
                         <div className='flex items-center'>
                           {habit.repeat &&
-                             habit.repeat.map(wd => (
+                            habit.repeat.map(wd => (
                               <p key={wd} className={`mx-1 px-2.5 py-1 bg-white ${wd == moment().format('ddd') && 'bg-yellow-300'}`}>
                                 {wd}
                               </p>
@@ -78,7 +77,7 @@ const Main = ({
                         <div>
                           <button
                             onClick={() => {
-                              handleDelete(habit._id)
+                              handleDelete(habit._id as number)
                             }}
                             className='text-white bg-red-400 px-3 py-1.5 rounded-md hover:bg-red-500 font-medium'
                           >
@@ -95,7 +94,6 @@ const Main = ({
       </div>
       <div className='col-span-2 w-3/4 mx-auto mt-10'>
         <h1 className='py-5 text-2xl font-bold'>Streak Heatmap</h1>
-        <Heatmap listHabit={listHabit} />
       </div>
     </section>
   )
@@ -115,15 +113,15 @@ const Home = () => {
       toast('Habit deleted!')
     }
 
-    // Habit.read('/data/habit/', config)
-    //   .then(res => res.data)
-    //   .then(res => {
-    //     // render if habit repeat today, ignore if startDate haven't come
-    //     let todayWeekday = moment().format('ddd')
-    //     let todayList = res.data.filter((h: IHabit) => h.repeat?.includes(todayWeekday) && moment().diff(h.startDate, 'days') >= 0)
-    //     setListHabit(res.data)
-    //     setTodayHabit(todayList)
-    //   })
+    Habit.read('/data/habit/', config)
+      .then(res => res.data)
+      .then(res => {
+        // render if habit repeat today, ignore if startDate haven't come
+        let todayWeekday = moment().format('ddd')
+        let todayList = res.data.filter((h: IHabit) => h.repeat?.includes(todayWeekday) && moment().diff(h.startDate, 'days') >= 0)
+        setListHabit(res.data)
+        setTodayHabit(todayList)
+      })
   }, [habitState])
 
   return (

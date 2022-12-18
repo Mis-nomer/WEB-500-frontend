@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import Collapsible from 'react-collapsible'
-import User from '../../instance'
-import { IUser } from '../../interface/user'
+import User from '../../api/instance'
+import { IUser } from '../../api/interface'
 import toast, { Toaster } from 'react-hot-toast'
 
 const SignUp = () => {
@@ -18,7 +18,7 @@ const SignUp = () => {
   const [isCreated, setIsCreated] = useState(false)
 
   const onSubmit = (data: IUser) => {
-    User.post('/signup', data).then(res => {
+    User.post('auth/signup', data).then(res => {
       if (res.status == 200) {
         toast('Account successfully register!')
         setIsCreated(true)
