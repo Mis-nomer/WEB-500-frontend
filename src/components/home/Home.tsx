@@ -22,7 +22,7 @@ const Main = ({
 }) => {
   // useReducer here
   const handleDelete = (id: number) => {
-    if (confirm("Don't you want to delete this habit?")) {
+    if (confirm("Do you want to delete this habit?")) {
       Habit.delete('/data/habit/' + id, config)
       setHabitState('delete')
     }
@@ -112,6 +112,7 @@ const Home = () => {
     if (habitState == 'delete') {
       toast('Habit deleted!')
     }
+    if (habitState != '') setHabitState('')
 
     Habit.read('/data/habit/', config)
       .then(res => res.data)
@@ -122,6 +123,7 @@ const Home = () => {
         setListHabit(res.data)
         setTodayHabit(todayList)
       })
+
   }, [habitState])
 
   return (

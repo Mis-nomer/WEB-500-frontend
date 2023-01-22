@@ -80,9 +80,8 @@ export default function ({
 
   return (
     <div>
-      <Toaster />
-      <div className={`absolute -sm:pt-10 inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start md:items-center `}>
-        <div className={`relative sm:w-1/2 w-full shadow-lg bg-[#084c61] transition-opacity duration-300`}>
+      <div className={`absolute -sm:overflow-hidden inset-0 bg-black bg-opacity-30 w-full flex justify-center items-start lg:items-center`}>
+        <div className={`relative lg:w-1/2 -lg:py-5 w-full shadow-lg bg-[#084c61] transition-opacity duration-300`}>
           <form onSubmit={handleSubmit(data => onSubmit(data as IHabit))} onBlur={() => setIsFocused('none')}>
             {/* Title */}
             <div className={`transition-colors pb-4 pt-6 px-8 text-sm text-white ${isFocused == 'title' && 'bg-[#ffc857]'} font-medium`}>
