@@ -3,7 +3,6 @@ import Home from './components/home/Home'
 import Admin from './components/admin/Dashboard'
 import SignUp from './components/auth/SignUp'
 import Login from './components/auth/Login'
-import Greet from './components/Greet'
 import { PrivateRoute } from './components/auth/Private'
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
             </PrivateRoute>
           }
         ></Route>
-        <Route path='/' element={<Greet />}></Route>
         <Route path='/admin' element={<Admin />}></Route>
         <Route path='/sign-up' element={<SignUp />}></Route>
         <Route path='/login' element={<Login />}></Route>

@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Abel';
+  src: url('../fonts/Abel-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'JosefinSans';
+  src: url('../fonts/JosefinSans-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: 'Almarai';
+  src: url('../fonts/Almarai-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Libre Baskerville';
+  src: url('../fonts/LibreBaskerville-Regular.ttf');
+}
+
+.font-main {
+  font-family: 'Abel';
+}
+
+.font-1 {
+  font-family: 'Josefin Sans';
+}
+.font-2 {
+  font-family: 'Almarai';
+}
+.font-3 {
+  font-family: 'Libre Baskerville';
+}
+.font-4 {
+  font-family: Arial, Helvetica, sans-serif;
+}

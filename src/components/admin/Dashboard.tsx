@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AdminSidebar from './AdminSidebar'
-import User from '../../controllers/controller'
+import { Controller } from '../../controllers/controller'
 import toast, { Toaster } from 'react-hot-toast'
 
 interface IUser {
@@ -15,16 +15,16 @@ const Dashboard = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    User.read('/users/').then(res =>
+    Controller.read('/users/').then(res =>
       setUserData(res.data.filter((user: IUser) => user.name.toLowerCase().includes(search) || user.email.toLowerCase().includes(search)))
     )
   }, [])
 
   const handleDelete = (user: {}) => {
     if (confirm('Confirm action')) {
-      User.delete('/users/', user)
-      User.read('/users/').then(res => setUserData(res.data))
-      toast('User deleted!')
+      Controller.delete('/users/', user)
+      Controller.read('/users/').then(res => setUserData(res.data))
+      toast('Controller deleted!')
     }
   }
 
@@ -47,12 +47,12 @@ const Dashboard = () => {
         <div className='p-6 mt-10 overflow-hidden col-span-4 text-center'>
           <section className='flex justify-evenly flex-wrap bg-white mt-5 rounded-md p-5'>
             <div className='w-full md:w-[32%]'>
-              <p className='font-semibold text-xl mb-2'>User Analytics</p>
+              <p className='font-semibold text-xl mb-2'>Controller Analytics</p>
             </div>
             <div className='bg-white p-8 rounded-md w-full'>
               <div className=' flex items-center justify-between pb-6'>
                 <div>
-                  <h2 className='text-gray-600 font-semibold'>User list</h2>
+                  <h2 className='text-gray-600 font-semibold'>Controller list</h2>
                   <span className='text-xs'>All user</span>
                 </div>
                 <div className='flex items-center'>
@@ -111,7 +111,7 @@ const Dashboard = () => {
                                 </div>
                               </td>
                               <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm '>
-                                <p className='text-gray-900 whitespace-no-wrap'>{user.role ? 'Admin' : 'User'}</p>
+                                <p className='text-gray-900 whitespace-no-wrap'>{user.role ? 'Admin' : 'Controller'}</p>
                               </td>
                               <td className='px-5 py-5 border-b border-gray-200 bg-white text-sm'>
                                 <p className='text-gray-900 whitespace-no-wrap'>{user.email}</p>

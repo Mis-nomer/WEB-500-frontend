@@ -6,4 +6,11 @@ const instance = axios.create({
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 })
 
+async function ExtractData(res: any) {
+  res.data = res.data.data
+  return res
+}
+
+instance.interceptors.response.use(ExtractData)
+
 export default instance
