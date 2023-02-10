@@ -34,3 +34,80 @@
 .font-4 {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.box {
+  transform-style: preserve-3d;
+  transform: rotateX(-15deg);
+  animation: rotate 15s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotateX(-15deg) rotateY(360deg);
+  }
+}
+
+.face {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  background: #ca9864;
+  overflow: hidden;
+}
+
+.front {
+  transform: translateZ(1em);
+  background: #ca9864;
+}
+.back {
+  transform: translateZ(-1em);
+  background: #ca9864;
+}
+.left {
+  transform: translateX(-1em) rotateY(90deg);
+  background: #d8aa77;
+}
+.right {
+  transform: translateX(1em) rotateY(90deg);
+  background: #d8aa77;
+}
+.top {
+  transform: translateY(-1em) rotateX(90deg);
+  background: #e8bb84;
+}
+.bottom {
+  transform: translateY(-1em) rotateX(90deg);
+}
+
+.front span,
+.back span,
+.top span {
+  position: absolute;
+  background: #bd8c58;
+}
+
+.top span {
+  height: 100%;
+  width: 5px;
+}
+
+.top span:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  width: 25px;
+  background: black;
+}
+
+.input-box {
+  /* box-shadow: 6px 2px 16px 0px rgba(136, 165, 191, 0.48), -6px -2px 16px 0px rgba(255, 255, 255, 0.8); */
+}
+
+.vertical-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
