@@ -4,18 +4,21 @@ import Admin from './components/admin/Dashboard'
 import SignUp from './components/auth/SignUp'
 import Login from './components/auth/Login'
 import { PrivateRoute } from './components/auth/Private'
+import { useMachine } from '@xstate/react'
+import { GlobalStateProvider, MachineContext } from './contexts/globalContext'
 
 function App() {
   const token = localStorage.getItem('token')
-
   return (
     <>
       <Routes>
         <Route
-          path='/home'
+          path='/'
           element={
             <PrivateRoute token={token}>
-              <Home />
+              <GlobalStateProvider>
+                <Home />
+              </GlobalStateProvider>
             </PrivateRoute>
           }
         ></Route>

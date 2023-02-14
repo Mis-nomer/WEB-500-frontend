@@ -3,6 +3,8 @@ import inst from '../api/instance'
 import { createMachine, assign } from 'xstate'
 import anime from 'animejs'
 import { IHabit } from '../api/interface'
+import delay from 'lodash.delay'
+
 export const Controller = {
   add: async (url: string, data?: {}, config?: AxiosRequestConfig) => await inst.post(url, data, config),
   read: async (url: string, config?: AxiosRequestConfig) => await inst.get(url, config),
@@ -12,13 +14,23 @@ export const Controller = {
 
 export const centralMachine = createMachine(
   {
+    predictableActionArguments: true,
+    schema: {
+      context: {} as {
+        loading: boolean
+        resource: any[]
+        text: string[]
+        boxSetup: boolean
+      },
+      events: {} as { type: 'ACTIVATE' } | { type: 'RENDER' } | { type: 'CLICK' },
+    },
     id: 'centralMachine',
     initial: 'Idle',
     context: {
       loading: true,
       resource: [], // data pulling from API
       text: [],
-      cleanup: false,
+      boxSetup: false,
     },
     states: {
       Idle: {
@@ -46,23 +58,24 @@ export const centralMachine = createMachine(
       },
       Retry: {
         after: {
-          4000: 'Loading',
+          3000: 'Loading',
         },
       },
       Render: {
-        entry: ['processData'],
-        after: {
-          1000: 'AnimateInit',
-        },
-      },
-      AnimateInit: {
-        entry: ['animate'],
+        entry: ['processData', 'animateGreet'],
         on: {
-          CLICK: 'CreateBox',
+          CLICK: 'AnimateSetup',
         },
       },
-      CreateBox: {
-        entry: ['cleanup', 'log'],
+      AnimateSetup: {
+        entry: ['animateSetup'],
+        exit: 'dataCleanUp',
+        after: {
+          1000: 'AnimateSelect', // animateSetup runs for 1s
+        },
+      },
+      AnimateSelect: {
+        entry: ['animateSelection'],
       },
     },
   },
@@ -71,23 +84,49 @@ export const centralMachine = createMachine(
       log: assign((context: any) => {
         console.log(context)
       }),
-      animate: () => {
+      animateGreet: () => {
         const inputBox = document.querySelector('.input-box')
-        const inputContent = document.querySelectorAll('.input-box__content')
+        const inputContents = document.querySelectorAll('.input-box__content')
         const t = anime.timeline({
+          delay: 500,
           targets: inputBox,
           direction: 'forwards',
           loop: false,
         })
 
-        t.add({ width: '0', opacity: 0, duration: 100, easing: 'linear' })
+        t.add({ width: '0', opacity: 0, duration: 500, easing: 'linear' })
         t.add({ width: '40vmin', opacity: 1, duration: 250, easing: 'spring' })
-        t.add({ targets: inputContent, opacity: 1, duration: 250, easing: 'spring' }, '+=250')
+        t.add({ targets: inputContents, opacity: 1, duration: 250, easing: 'spring' })
         t.play()
       },
-      cleanup: assign({ resource: [], cleanup: true }),
+      dataCleanUp: assign({ resource: [], text: [], boxSetup: true }),
+      animateSetup: () => {
+        const wallWrapper = document.querySelector('.wall-wrapper')
+        const inputBoxControl = document.querySelector('.input-box__control')
+        const t = anime.timeline({
+          targets: wallWrapper,
+          direction: 'forwards',
+          loop: false,
+        })
+
+        t.add({ targets: [inputBoxControl, wallWrapper], opacity: 0, duration: 1000, easing: 'easeOutExpo' })
+        t.play()
+      },
+      animateSelection: () => {
+        const widget = document.querySelectorAll('.widget li')
+
+        const t = anime.timeline({
+          delay: 1000,
+          targets: widget,
+          direction: 'forwards',
+          loop: false,
+        })
+        t.add({ translateY: '-100px', duration: 1000, easing: 'linear' })
+        // t.add({ targets: '.widget li', translateY: 0, duration: 1000, elasticity: 100 })
+
+        t.play()
+      },
       processData: assign({
-        //@ts-ignore
         text: ctx => ctx.resource.map((data: IHabit) => data?.title),
       }),
     },
