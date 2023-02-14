@@ -21,7 +21,7 @@ const Home = () => {
       <Toaster />
       <nav>
         <h1 className='text-7xl font-main bg-white px-5 py-3'>.quietbox</h1>
-        <div className='logo-box bg-white fixed top-[7%] left-[14em]'>
+        <div className='logo-box bg-white fixed max-xl:top-[8%] top-[7%] left-[14em]'>
           <div className='box hover:cursor-pointer flex justify-center items-center z-50'>
             <div className='left face'></div>
             <div className='right face'></div>

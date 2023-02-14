@@ -3,7 +3,6 @@ import inst from '../api/instance'
 import { createMachine, assign } from 'xstate'
 import anime from 'animejs'
 import { IHabit } from '../api/interface'
-import delay from 'lodash.delay'
 
 export const Controller = {
   add: async (url: string, data?: {}, config?: AxiosRequestConfig) => await inst.post(url, data, config),
@@ -12,28 +11,39 @@ export const Controller = {
   update: async (url: string, body: {}, config?: AxiosRequestConfig) => await inst.put(url, body, config),
 }
 
+interface IContext {
+  loading: boolean
+  resource: any[]
+  text: string[]
+  boxSetup: boolean
+  retry: number
+  select: number
+}
+
+const machineSchema = {
+  context: {} as IContext,
+  events: {} as { type: 'SELECT'; data: number } | { type: 'ACTIVATE' } | { type: 'RENDER' } | { type: 'CLICK' },
+}
+
+const machineContext = {
+  loading: true,
+  resource: [], // data pulling from API
+  text: [],
+  boxSetup: false,
+  retry: 0,
+  select: 0,
+}
+
 export const centralMachine = createMachine(
   {
-    predictableActionArguments: true,
-    schema: {
-      context: {} as {
-        loading: boolean
-        resource: any[]
-        text: string[]
-        boxSetup: boolean
-      },
-      events: {} as { type: 'ACTIVATE' } | { type: 'RENDER' } | { type: 'CLICK' },
-    },
     id: 'centralMachine',
     initial: 'Idle',
-    context: {
-      loading: true,
-      resource: [], // data pulling from API
-      text: [],
-      boxSetup: false,
-    },
+    schema: machineSchema,
+    context: machineContext,
+    predictableActionArguments: true,
     states: {
       Idle: {
+        // always: 'Render',
         on: {
           ACTIVATE: 'Loading',
         },
@@ -57,8 +67,17 @@ export const centralMachine = createMachine(
         },
       },
       Retry: {
+        entry: ['trackRetry', 'log'],
         after: {
-          3000: 'Loading',
+          1000: [
+            {
+              target: 'Render',
+              cond: 'retryCount',
+            },
+            {
+              target: 'Loading',
+            },
+          ],
         },
       },
       Render: {
@@ -68,14 +87,16 @@ export const centralMachine = createMachine(
         },
       },
       AnimateSetup: {
-        entry: ['animateSetup'],
-        exit: 'dataCleanUp',
-        after: {
-          1000: 'AnimateSelect', // animateSetup runs for 1s
-        },
+        entry: ['animateSetup', 'dataCleanUp'],
+        always: 'AnimateSelect',
       },
       AnimateSelect: {
         entry: ['animateSelection'],
+        on: [
+          { event: 'SELECT', actions: 'changeOption' },
+          // { event: 'HOVER', actions: 'hoverSelection' },
+          // { event: 'HOVEROUT', actions: 'hoverOutSelection' },
+        ],
       },
     },
   },
@@ -84,6 +105,7 @@ export const centralMachine = createMachine(
       log: assign((context: any) => {
         console.log(context)
       }),
+      trackRetry: assign({ retry: ctx => ctx.retry + 1 }),
       animateGreet: () => {
         const inputBox = document.querySelector('.input-box')
         const inputContents = document.querySelectorAll('.input-box__content')
@@ -94,12 +116,10 @@ export const centralMachine = createMachine(
           loop: false,
         })
 
-        t.add({ width: '0', opacity: 0, duration: 500, easing: 'linear' })
-        t.add({ width: '40vmin', opacity: 1, duration: 250, easing: 'spring' })
-        t.add({ targets: inputContents, opacity: 1, duration: 250, easing: 'spring' })
-        t.play()
+        t.add({ width: ['0', '23vmax'], opacity: 1, duration: 500, easing: 'spring' })
+        t.add({ targets: inputContents, opacity: 1, duration: 250, easing: 'linear' })
       },
-      dataCleanUp: assign({ resource: [], text: [], boxSetup: true }),
+      dataCleanUp: assign({ resource: [], boxSetup: true }),
       animateSetup: () => {
         const wallWrapper = document.querySelector('.wall-wrapper')
         const inputBoxControl = document.querySelector('.input-box__control')
@@ -110,25 +130,31 @@ export const centralMachine = createMachine(
         })
 
         t.add({ targets: [inputBoxControl, wallWrapper], opacity: 0, duration: 1000, easing: 'easeOutExpo' })
-        t.play()
       },
       animateSelection: () => {
-        const widget = document.querySelectorAll('.widget li')
-
         const t = anime.timeline({
-          delay: 1000,
-          targets: widget,
+          targets: '.widget li',
           direction: 'forwards',
           loop: false,
         })
-        t.add({ translateY: '-100px', duration: 1000, easing: 'linear' })
-        // t.add({ targets: '.widget li', translateY: 0, duration: 1000, elasticity: 100 })
-
-        t.play()
+        t.add({ opacity: 1, translateY: [-100, 0], delay: anime.stagger(100, { start: 500, easing: 'easeInOutCirc' }) })
+        t.add({
+          targets: '.widget-divider',
+          opacity: 1,
+          width: ['0%', '100%'],
+          duration: 750,
+          easing: 'easeOutQuart',
+        })
       },
+      changeOption: assign({
+        select: (ctx, event) => ctx.select + (event as { type: 'SELECT'; data: number }).data,
+      }),
       processData: assign({
         text: ctx => ctx.resource.map((data: IHabit) => data?.title),
       }),
+    },
+    guards: {
+      retryCount: ctx => ctx.retry == 3,
     },
   }
 )

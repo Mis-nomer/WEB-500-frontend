@@ -1,21 +1,21 @@
 @font-face {
   font-family: 'Abel';
-  src: url('../../public/fonts/Abel-Regular.ttf');
+  src: url('/fonts/Abel-Regular.ttf');
 }
 
 @font-face {
   font-family: 'JosefinSans';
-  src: url('../../public/fonts/JosefinSans-VariableFont_wght.ttf');
+  src: url('/fonts/JosefinSans-VariableFont_wght.ttf');
 }
 
 @font-face {
   font-family: 'Almarai';
-  src: url('../../public/fonts/Almarai-Regular.ttf');
+  src: url('/fonts/Almarai-Regular.ttf');
 }
 
 @font-face {
   font-family: 'Libre Baskerville';
-  src: url('../../public/fonts/LibreBaskerville-Regular.ttf');
+  src: url('/fonts/LibreBaskerville-Regular.ttf');
 }
 
 .font-main {
@@ -102,13 +102,13 @@
 }
 
 .box-cover {
-  background-image: url('../../public/box2.png');
+  background-image: url('/box2.png');
   background-size: cover;
 }
 
-.input-box {
+/* .input-box {
   box-shadow: -15px 7px 10px -4px #4c4c4c, -10px 12px 4px -4px rgba(0, 0, 0, 0.24);
-}
+} */
 
 .vertical-center {
   position: absolute;
@@ -117,7 +117,7 @@
   transform: translateX(-50%) translateY(-50%);
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   nav h1 {
     display: none;
   }
