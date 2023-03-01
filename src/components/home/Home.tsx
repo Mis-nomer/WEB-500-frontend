@@ -2,14 +2,14 @@ import { Toaster } from 'react-hot-toast'
 import { useEffect, useContext } from 'react'
 import { BarLoader } from 'react-spinners'
 import '../../styles/home.css'
-import { MachineContext } from '../../contexts/globalContext'
+import { GlobalStateContext } from '../../contexts/globalContext'
 import { useActor } from '@xstate/react'
 import { InputBox } from '../InputBox'
 
 import MarqueeWall from '../MarqueeWall'
 
 const Home = () => {
-  const globalServices = useContext(MachineContext)
+  const globalServices = useContext(GlobalStateContext)
   const [state, send] = useActor(globalServices.centralService)
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const Home = () => {
       <Toaster />
       <nav>
         <h1 className='text-7xl font-main bg-white px-5 py-3'>.quietbox</h1>
-        <div className='logo-box bg-white fixed max-xl:top-[8%] top-[7%] left-[14em]'>
+        <div className='logo-box bg-white fixed top-[2.75em] left-[14em] py-3'>
           <div className='box hover:cursor-pointer flex justify-center items-center z-50'>
             <div className='left face'></div>
             <div className='right face'></div>

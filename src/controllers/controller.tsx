@@ -5,9 +5,9 @@ import anime from 'animejs'
 import { IHabit } from '../api/interface'
 
 export const Controller = {
-  add: async (url: string, data?: {}, config?: AxiosRequestConfig) => await inst.post(url, data, config),
+  new: async (url: string, data?: {}, config?: AxiosRequestConfig) => await inst.post(url, data, config),
   read: async (url: string, config?: AxiosRequestConfig) => await inst.get(url, config),
-  delete: async (url: string, config?: AxiosRequestConfig) => await inst.delete(url, config),
+  remove: async (url: string, config?: AxiosRequestConfig) => await inst.delete(url, config),
   update: async (url: string, body: {}, config?: AxiosRequestConfig) => await inst.put(url, body, config),
 }
 
@@ -53,9 +53,7 @@ export const centralMachine = createMachine(
         invoke: {
           id: 'getData',
           src: () => {
-            // const config = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-            // return Controller.read('/data/habit/', config).then(res => res.data)
-            return Controller.read('/box').then(res => res.data)
+            return Controller.read('/marquee').then(res => res.data)
           },
           onDone: {
             target: 'Render',
@@ -87,7 +85,7 @@ export const centralMachine = createMachine(
         },
       },
       AnimateSetup: {
-        entry: ['animateSetup', 'dataCleanUp'],
+        entry: ['animationSetup', 'dataCleanup'],
         always: 'AnimateSelect',
       },
       AnimateSelect: {
@@ -119,8 +117,8 @@ export const centralMachine = createMachine(
         t.add({ width: ['0', '23vmax'], opacity: 1, duration: 500, easing: 'spring' })
         t.add({ targets: inputContents, opacity: 1, duration: 250, easing: 'linear' })
       },
-      dataCleanUp: assign({ resource: [], boxSetup: true }),
-      animateSetup: () => {
+      dataCleanup: assign({ resource: [], boxSetup: true }),
+      animationSetup: () => {
         const wallWrapper = document.querySelector('.wall-wrapper')
         const inputBoxControl = document.querySelector('.input-box__control')
         const t = anime.timeline({
@@ -150,7 +148,7 @@ export const centralMachine = createMachine(
         select: (ctx, event) => ctx.select + (event as { type: 'SELECT'; data: number }).data,
       }),
       processData: assign({
-        text: ctx => ctx.resource.map((data: IHabit) => data?.title),
+        text: ctx => ctx.resource.map((data: any) => data?.word),
       }),
     },
     guards: {

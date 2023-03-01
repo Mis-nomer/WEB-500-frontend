@@ -7,10 +7,9 @@ interface GlobalStateContextType {
   centralService: ActorRefFrom<typeof centralMachine>
 }
 
-export const MachineContext = createContext({} as GlobalStateContextType)
+export const GlobalStateContext = createContext({} as GlobalStateContextType)
 
 export const GlobalStateProvider = (props: any) => {
   const centralService = useInterpret(centralMachine)
-
-  return <MachineContext.Provider value={{ centralService }}>{props.children}</MachineContext.Provider>
+  return <GlobalStateContext.Provider value={{ centralService }}>{props.children}</GlobalStateContext.Provider>
 }

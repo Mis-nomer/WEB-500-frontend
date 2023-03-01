@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom'
+
 interface IProps {
   token: string | null
   redirectPath?: string

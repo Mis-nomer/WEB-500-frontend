@@ -48,35 +48,35 @@
 }
 
 .face {
-  width: 2rem;
-  height: 2rem;
+  width: 2.25em;
+  height: 2.25rem;
   position: absolute;
   background: #ca9864;
   overflow: hidden;
 }
 
 .front {
-  transform: translateZ(1em);
+  transform: translateZ(1.125rem);
   background: #ca9864;
 }
 .back {
-  transform: translateZ(-1em);
+  transform: translateZ(-1.125rem);
   background: #ca9864;
 }
 .left {
-  transform: translateX(-1em) rotateY(90deg);
+  transform: translateX(-1.125rem) rotateY(90deg);
   background: #d8aa77;
 }
 .right {
-  transform: translateX(1em) rotateY(90deg);
+  transform: translateX(1.125rem) rotateY(90deg);
   background: #d8aa77;
 }
 .top {
-  transform: translateY(-1em) rotateX(90deg);
+  transform: translateY(-1.125rem) rotateX(90deg);
   background: #e8bb84;
 }
 .bottom {
-  transform: translateY(-1em) rotateX(90deg);
+  transform: translateY(-1.125rem) rotateX(90deg);
 }
 
 .front span,
@@ -105,10 +105,6 @@
   background-image: url('/box2.png');
   background-size: cover;
 }
-
-/* .input-box {
-  box-shadow: -15px 7px 10px -4px #4c4c4c, -10px 12px 4px -4px rgba(0, 0, 0, 0.24);
-} */
 
 .vertical-center {
   position: absolute;
