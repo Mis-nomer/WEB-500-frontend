@@ -1,0 +1,6 @@
+<svg width="1440" height="1024" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1="0.583292" y1="-0.812263" x2="486.583" y2="348.188" stroke="black" stroke-width="2"/>
+<line y1="-1" x2="598.328" y2="-1" transform="matrix(0.812263 -0.583292 -0.583292 -0.812263 0 1024)" stroke="black" stroke-width="2"/>
+<line y1="-1" x2="598.328" y2="-1" transform="matrix(-0.812263 0.583292 0.583292 0.812263 1442 0)" stroke="black" stroke-width="2"/>
+<line x1="1441.42" y1="1024.81" x2="955.417" y2="675.812" stroke="black" stroke-width="2"/>
+</svg>

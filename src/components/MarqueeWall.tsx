@@ -56,13 +56,15 @@ function generateWall(source: ReactElement[], fontHeight: number, windowHeight: 
   return wallArr
 }
 
-const MarqueeWall = ({ resource }: any) => {
+const MarqueeWall = ({ text }: any) => {
   const { width, height } = useWindowDimension(300) // 300ms delay
   const [textWall, setTextWall] = useState<ReactElement[]>()
 
+  console.log(textWall)
+
   useEffect(() => {
-    if (resource.length) {
-      let section = generateSection(resource)
+    if (text.length) {
+      let section = generateSection(text)
       //* Formula: screen width / character size * total characters
       // This is to ensure Marquee line won't end abruptly, but form a long continuous string
       const totalLineWidth = section.reduce((a, b) => (a += b.length), 0)
@@ -72,7 +74,7 @@ const MarqueeWall = ({ resource }: any) => {
 
       setTextWall(wall)
     }
-  }, [resource])
+  }, [text])
 
   return <div className='wall-wrapper'>{textWall}</div>
 }
